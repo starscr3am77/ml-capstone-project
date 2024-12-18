@@ -1,5 +1,7 @@
 # Professional Certificate in Machine Learning and Artificial Intelligence Program from UC Berkeley Executive Education
 
+# 20.1
+
 # INTRODUCTION
 This repository contains my capstone project for the Professional Certificate in Machine Learning and Artificial Intelligence Program from UC Berkeley Executive Education. The purpose of my project is to leverage the skills acquired throughout the course to build a trained model that can be used to analyze prescription claim data in near-real time. The trained model will use previously identified fraudulent claims for a single quarter then will be applied to the remaining 3 quarters to predict fraud with at least a 70% threshold.
 
@@ -115,3 +117,16 @@ merged_df.drop(columns=['_merge'], inplace=True)
 
 # INITIAL RESULTS
 The actual q1 fraud rate was 0.38% while the predicted rate for q2-q4 was 0.11%. I did a feature analysis and noticed cardholder_id was the most important feature. I'm curious to run it again without the cardholder_id to see if the results change. 
+
+# 24.1
+
+# CONTINUED TRAINING
+I created a second notebook to test my hypothesis that the model could be relying too heavily on cardholder_id. I kept all of the same steps as before however I removed the cardholder_id and age columns in the data preparation step. After reviewing the results I was able to determine that the fraud rate actually got worse. Feature importance appears to be the same without the two columns I removed so it did appear that those two columns did not contribute to bias. 
+
+I was hoping to find a solution that would be close to the actual fraud rate in the control quarter (Q1). I reviewed the initial solution I came up with and decided that rather than have a static probability threshold, I would use precision recall to determine where the cutoff should be. That way, I am removing my own bias from the model and allowing the data to determine the best path forward. I also included a calibration of the model using the isotonic method. By adding the two additional steps I was able to get the rate a little bit closer at 0.26% 
+
+# ANOTHER GOTCHA
+I was happy with the results and wanted to add additional visualizations so I charted the fraud totals by customer_id. What I found was the model only predicted fraud in the same two customers that the Q1 control data had. To work around that I attempted to rebalance the data. The process returned a similar fraud rate but still only predicted fraud in the same two customers. I also noticed the rebalanced data had different important features. 
+
+# CONCLUSION
+The solutions used do a decent job predicting fraud given a control group but does appear to rely too heavily on some of the elements of the previously identified fraud. In order to ignore those patterns I would recommend we either find a more diverse group of fraud claims or eliminate them from and rely on feature engineering so the model would rely on pattern or behavior matching. 
